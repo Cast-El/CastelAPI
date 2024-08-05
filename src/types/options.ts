@@ -5,7 +5,7 @@ export type Options = {
   body?: Record<string, any>;
   method?: string;
   parameters?: Map<string, any>;
-  cache?: { useCache: boolean; cacheTime: number };
+  cache?: { enabled: boolean; cacheTime: number };
 };
 
 export type PostOptions = Options & {

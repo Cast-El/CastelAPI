@@ -1,51 +1,77 @@
 import { isEndpoint } from "./commons";
 import { Endpoint } from "./types/endpoint";
 import { Options } from "./types/options";
-import Api from "./api";
+import { ResponseWrapper } from "./types/responseWrapper";
 
-const api = new Api();
+import apiInstance from "./apiInstance";
 
-export const loading = api.loading;
-export const config = api.config;
+export const getLoading = () => {
+  return apiInstance.loading;
+};
 
-export async function get<T>(url: string, options?: Options): Promise<T> {
-  if (options?.cache?.useCache) {
-    const cachedResponse = api.cache.get<T>(url);
-    if (cachedResponse) {
-        const currentTime = Date.now();
-        const cacheTime = options.cache.cacheTime;
-        if (currentTime - cachedResponse.timeStamp < cacheTime) {
-          return cachedResponse.data;
-        } else {
-          api.cache.delete(url);
-        }
-      }
+export const setLoading = (value: boolean) => {
+  apiInstance.loading = value;
+};
+
+export const getConfig = () => {
+  return apiInstance.config;
+};
+
+export const setConfig = (value: {
+  baseUrl: string;
+  headers: Record<string, string>;
+}) => {
+  apiInstance.config = value;
+};
+export async function get<T>(
+  url: string,
+  options?: Options
+): Promise<ResponseWrapper<T>> {
+  if (isEndpoint(url)) {
+    url = apiInstance.config.baseUrl + url;
   }
-  const response = await api.get<T>(url, options);
-  if (options?.cache) api.cache.set(url, response);
+  const cachedResponse = apiInstance.cache.get<T>(url);
+  if (cachedResponse) {
+    const currentTime = Date.now();
+    if (currentTime - cachedResponse.timeStamp) {
+      return cachedResponse;
+    } else {
+      apiInstance.cache.delete(url);
+    }
+  }
+  const response = await apiInstance.get<T>(url, options);
+  if (options?.cache?.enabled && options?.cache?.cacheTime) {
+    apiInstance.cache.set(url, response, options.cache.cacheTime);
+  }
   return response;
 }
 
 export function post<T>(
-    url: Endpoint<string> | string,
-    options?: Options
-): Promise<T> {
-  return api.post<T>(url, options);
+  url: Endpoint<string> | string,
+  options?: Options
+): Promise<ResponseWrapper<T>> {
+  if (isEndpoint(url)) {
+    url = apiInstance.config.baseUrl + url;
+  }
+  return apiInstance.post<T>(url, options);
 }
 
 export function put<T>(
-    url: Endpoint<string> | string,
-    options?: Options
-):  Promise<T> {
-  return api.put<T>(url, options);
+  url: Endpoint<string> | string,
+  options?: Options
+): Promise<ResponseWrapper<T>> {
+  if (isEndpoint(url)) {
+    url = apiInstance.config.baseUrl + url;
+  }
+  return apiInstance.put<T>(url, options);
 }
 
 export function remove<T>(
   url: Endpoint<string> | string,
   options?: Options
-): Promise<T> {
+): Promise<ResponseWrapper<T>> {
   if (isEndpoint(url)) {
-    url = api.config.baseUrl + url;
+    url = apiInstance.config.baseUrl + url;
   }
-  return api.delete<T>(url, options);
+  return apiInstance.delete<T>(url, options);
 }

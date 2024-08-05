@@ -1,11 +1,9 @@
 import Cache from "./cache";
-import {
-  createUrlWithQuery,
-  isEndpoint,
-} from "./commons";
+import { createUrlWithQuery, isEndpoint } from "./commons";
 import { parseResponse } from "./parser";
 import { Endpoint } from "./types/endpoint";
 import { Options, PostOptions } from "./types/options";
+import { ResponseWrapper } from "./types/responseWrapper";
 
 export const METHODS = {
   post: "POST",
@@ -17,7 +15,7 @@ export const METHODS = {
 type Methods = "POST" | "GET" | "PUT" | "DELETE";
 
 class Api {
-  config = { baseUrl: "", headers: {} };
+  public config = { baseUrl: "", headers: {} };
   public cache: Cache;
   public loading: boolean = false;
 
@@ -31,6 +29,7 @@ class Api {
     paramsOptions?: Options
   ): Promise<any> {
     this.loading = true;
+    console.log(this.loading)
     const options: Options = this._updateOptions(method, paramsOptions);
     try {
       const response = await fetch(url, options as RequestInit);
@@ -44,6 +43,7 @@ class Api {
       throw error;
     } finally {
       this.loading = false;
+      console.log(this.loading)
     }
   }
 
@@ -106,23 +106,17 @@ class Api {
     return path;
   }
 
-  async get<T>(
+  get<T>(
     url: Endpoint<string> | string,
-    options?: PostOptions
-  ): Promise<T> {
-    const cache = options?.cache;
-    if (cache) {
-      const cachedResponse = this.cache.get<T>(url);
-      if (cachedResponse) return cachedResponse as T;
-    }
-    const response = await this.#useApi(METHODS.get as Methods, url, options);
-    if (cache) {
-      this.cache.set(url, response);
-    }
-    return response;
+    options?: Options
+  ): Promise<ResponseWrapper<T>> {
+   return this.#useApi(METHODS.get as Methods, url, options);
   }
 
-  post<T>(url: Endpoint<string> | string, options?: PostOptions): Promise<T> {
+  post<T>(
+    url: Endpoint<string> | string,
+    options?: PostOptions
+  ): Promise<ResponseWrapper<T>> {
     return this.#useApi(
       METHODS.post as Methods,
       this.createUrl(url, options?.parameters),
@@ -130,7 +124,10 @@ class Api {
     );
   }
 
-  put<T>(url: Endpoint<string> | string, options?: Options): Promise<T> {
+  put<T>(
+    url: Endpoint<string> | string,
+    options?: Options
+  ): Promise<ResponseWrapper<T>> {
     return this.#useApi(
       METHODS.put as Methods,
       this.createUrl(url, options?.parameters),
@@ -138,7 +135,10 @@ class Api {
     );
   }
 
-  delete<T>(url: Endpoint<string> | string, options?: Options): Promise<T> {
+  delete<T>(
+    url: Endpoint<string> | string,
+    options?: Options
+  ): Promise<ResponseWrapper<T>> {
     if (isEndpoint(url)) {
       url = this.config.baseUrl + url;
     }

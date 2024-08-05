@@ -1,3 +1,5 @@
-export type CachedValue<T> = {
-    data:T, timeStamp: number
-}
+import { ResponseWrapper } from "./responseWrapper";
+
+export type CachedValue<T> = ResponseWrapper<T> & {
+  timeStamp: number;
+};
