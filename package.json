@@ -1,0 +1,41 @@
+{
+  "name": "y",
+  "version": "1.0.0",
+  "description": " a powerful and easy-to-use JavaScript library for managing HTTP requests in your web applications. Designed to simplify interactions with APIs, CastelAPI offers an intuitive interface and advanced features such as error handling, loading indicators, and response caching.",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+/Cast-El/CastelAPI.git"
+  },
+  "keywords": [
+    "api",
+    "http",
+    "request",
+    "typescript",
+    "javascript",
+    "axios",
+    "fetch",
+    "get",
+    "put",
+    "post",
+    "delete",
+    "cache",
+    "castel",
+    "castelapi"
+  ],
+  "author": "Vincent Castel",
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://github.com/Cast-El/CastelAPI/issues"
+  },
+  "homepage": "https://github.com/Cast-El/CastelAPI#readme",
+  "devDependencies": {
+    "@types/node": "^22.1.0",
+    "typescript": "^5.5.4"
+  }
+}
