@@ -117,6 +117,7 @@ class Api {
 _Api_instances = new WeakSet(), _Api_useApi = function _Api_useApi(method, url, paramsOptions) {
     return __awaiter(this, void 0, void 0, function* () {
         this.loading = true;
+        console.log(this.loading);
         const options = this._updateOptions(method, paramsOptions);
         try {
             const response = yield fetch(url, options);
@@ -132,6 +133,7 @@ _Api_instances = new WeakSet(), _Api_useApi = function _Api_useApi(method, url, 
         }
         finally {
             this.loading = false;
+            console.log(this.loading);
         }
     });
 };

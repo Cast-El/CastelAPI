@@ -12,47 +12,65 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.config = exports.loading = void 0;
+exports.setConfig = exports.getConfig = exports.setLoading = exports.getLoading = void 0;
 exports.get = get;
 exports.post = post;
 exports.put = put;
 exports.remove = remove;
 const commons_1 = require("./commons");
-const api_1 = __importDefault(require("./api"));
-const api = new api_1.default();
-exports.loading = api.loading;
-exports.config = api.config;
+const apiInstance_1 = __importDefault(require("./apiInstance"));
+console.log('apiInstance in main:', apiInstance_1.default);
+const getLoading = () => {
+    console.log('getLoading:', apiInstance_1.default.loading);
+    return apiInstance_1.default.loading;
+};
+exports.getLoading = getLoading;
+const setLoading = (value) => {
+    apiInstance_1.default.loading = value;
+    console.log('setLoading:', apiInstance_1.default.loading);
+};
+exports.setLoading = setLoading;
+const getConfig = () => {
+    console.log('getConfig:', apiInstance_1.default.config);
+    return apiInstance_1.default.config;
+};
+exports.getConfig = getConfig;
+const setConfig = (value) => {
+    apiInstance_1.default.config = value;
+    console.log('setConfig:', apiInstance_1.default.config);
+};
+exports.setConfig = setConfig;
 function get(url, options) {
     return __awaiter(this, void 0, void 0, function* () {
         var _a;
         if ((_a = options === null || options === void 0 ? void 0 : options.cache) === null || _a === void 0 ? void 0 : _a.useCache) {
-            const cachedResponse = api.cache.get(url);
+            const cachedResponse = apiInstance_1.default.cache.get(url);
             if (cachedResponse) {
                 const currentTime = Date.now();
                 const cacheTime = options.cache.cacheTime;
                 if (currentTime - cachedResponse.timeStamp < cacheTime) {
-                    return cachedResponse.data;
+                    return cachedResponse;
                 }
                 else {
-                    api.cache.delete(url);
+                    apiInstance_1.default.cache.delete(url);
                 }
             }
         }
-        const response = yield api.get(url, options);
+        const response = yield apiInstance_1.default.get(url, options);
         if (options === null || options === void 0 ? void 0 : options.cache)
-            api.cache.set(url, response);
+            apiInstance_1.default.cache.set(url, response);
         return response;
     });
 }
 function post(url, options) {
-    return api.post(url, options);
+    return apiInstance_1.default.post(url, options);
 }
 function put(url, options) {
-    return api.put(url, options);
+    return apiInstance_1.default.put(url, options);
 }
 function remove(url, options) {
     if ((0, commons_1.isEndpoint)(url)) {
-        url = api.config.baseUrl + url;
+        url = apiInstance_1.default.config.baseUrl + url;
     }
-    return api.delete(url, options);
+    return apiInstance_1.default.delete(url, options);
 }
