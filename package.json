@@ -1,5 +1,5 @@
 {
-  "name": "y",
+  "name": "castelapi",
   "version": "1.0.0",
   "description": " a powerful and easy-to-use JavaScript library for managing HTTP requests in your web applications. Designed to simplify interactions with APIs, CastelAPI offers an intuitive interface and advanced features such as error handling, loading indicators, and response caching.",
   "main": "dist/index.js",

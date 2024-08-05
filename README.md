@@ -19,24 +19,7 @@ Here is an example of configuring and using CastelAPI in your project:
 ```typescript
 import CastelAPI from 'castelapi';
 
-const api = new CastelAPI({
-  baseURL: 'https://api.example.com',
-  headers: {
-    'Authorization': 'Bearer your-token'
-  }
-});
-
-// Example usage in a GET request with caching
-async function fetchData() {
-  try {
-    const response = await api.get('/your-endpoint', {}, true);
-    console.log(response.data);
-  } catch (error) {
-    console.error('Error fetching data:', error);
-  }
-}
-
-fetchData();
+//in Progress
 
 ```
 ## Contributions:
