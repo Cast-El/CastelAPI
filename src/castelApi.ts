@@ -1,30 +1,15 @@
 import { isEndpoint } from "./commons";
 import { Endpoint } from "./types/endpoint";
-import { Options } from "./types/options";
+import { Options, PostOptions } from "./types/options";
 import { ResponseWrapper } from "./types/responseWrapper";
+import Api from "./api";
 
-import apiInstance from "./apiInstance";
+export const apiInstance = new Api();
+export const config = apiInstance.config;
+export const loading = () => apiInstance.loading;
 
-export const getLoading = () => {
-  return apiInstance.loading;
-};
-
-export const setLoading = (value: boolean) => {
-  apiInstance.loading = value;
-};
-
-export const getConfig = () => {
-  return apiInstance.config;
-};
-
-export const setConfig = (value: {
-  baseUrl: string;
-  headers: Record<string, string>;
-}) => {
-  apiInstance.config = value;
-};
 export async function get<T>(
-  url: string,
+  url: Endpoint<string> | string,
   options?: Options
 ): Promise<ResponseWrapper<T>> {
   if (isEndpoint(url)) {
@@ -33,11 +18,11 @@ export async function get<T>(
   const cachedResponse = apiInstance.cache.get<T>(url);
   if (cachedResponse) {
     const currentTime = Date.now();
-    if (currentTime - cachedResponse.timeStamp) {
+    const isExpired = cachedResponse.timeStamp - currentTime <= 0;
+    if (!isExpired) {
       return cachedResponse;
-    } else {
-      apiInstance.cache.delete(url);
     }
+    apiInstance.cache.delete(url);
   }
   const response = await apiInstance.get<T>(url, options);
   if (options?.cache?.enabled && options?.cache?.cacheTime) {
@@ -48,7 +33,7 @@ export async function get<T>(
 
 export function post<T>(
   url: Endpoint<string> | string,
-  options?: Options
+  options?: PostOptions
 ): Promise<ResponseWrapper<T>> {
   if (isEndpoint(url)) {
     url = apiInstance.config.baseUrl + url;
@@ -58,7 +43,7 @@ export function post<T>(
 
 export function put<T>(
   url: Endpoint<string> | string,
-  options?: Options
+  options?: PostOptions
 ): Promise<ResponseWrapper<T>> {
   if (isEndpoint(url)) {
     url = apiInstance.config.baseUrl + url;

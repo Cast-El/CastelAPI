@@ -1,6 +1,7 @@
+import { ICache } from "./types/cache";
 import { CachedValue } from "./types/cachedValue";
 
-class Cache {
+class Cache implements ICache {
   #store: Map<string, any>;
 
   constructor() {
