@@ -1,6 +1,8 @@
+import { ResponseWrapper } from "./responseWrapper";
+
 export type Config = {
   baseUrl: string;
   headers: { [key: string]: string };
   timeout: number;
-  responseInterceptor?: <T>(response: T) => Partial<T>;
+  responseInterceptor?: <T>(data: ResponseWrapper<T>) => ResponseWrapper<T>;
 };

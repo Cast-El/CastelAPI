@@ -1,6 +1,6 @@
 export type Options = {
   retry?: number;
-  headers?: Partial<Headers> | Record<string, string> | null | undefined;
+  headers?: Record<string, string> | undefined | null
   method?: string;
   parameters?: Map<string, any>;
   cache?: { enabled: boolean; cacheTime: number };

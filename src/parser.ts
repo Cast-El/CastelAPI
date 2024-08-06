@@ -1,38 +1,47 @@
 import { ResponseType } from "./types/responseType";
-export const parse = (
-  response: any,
-  responseType?: ResponseType | undefined
-): Promise<any> => {
+import { ResponseWrapper } from "./types/responseWrapper";
+
+export const parseResponse = async <T>(
+  response: Response
+): Promise<ResponseWrapper<T>> => {
   if (!response.ok) {
     throw response;
   }
-  return Promise.resolve(parseResponse(response, responseType));
+  return await parse<T>(response);
 };
 
-export const parseResponse = async (
-  response: any,
-  responseType?: ResponseType | undefined
-): Promise<any> => {
+export const parse = async <T>(
+  response: Response,
+  responseType?: ResponseType
+): Promise<ResponseWrapper<T>> => {
   const isBlob =
     response.headers?.get("Content-Type") === "application/pdf" ||
     responseType === "blob";
   const isError = response instanceof TypeError || !response;
   const hasNoCloneFunction = !response || typeof response.clone !== "function";
+
   if (isBlob || isError || hasNoCloneFunction) {
-    return response;
+    // Returning with a fallback type of `T` in case of errors or unsupported content types
+    return { data: undefined as unknown as T, url: response.url, status: response.status };
   }
+
   const cloneResponse = response.clone();
-  let result = await parseJson(response);
+  let result: ResponseWrapper<T> = await parseJson<T>(response);
+
   if (!result.data) {
-    result = await parseeText(cloneResponse);
+    result = await parseText<T>(cloneResponse);
   }
-  if (typeof result?.data === "string") {
-    result = parseBoolean(result);
+
+  if (typeof result.data === "string") {
+    result = parseBoolean(result as ResponseWrapper<string>) as ResponseWrapper<T>;
   }
+
   return result;
 };
 
-const parseJson = async (response: any): Promise<any> => {
+const parseJson = async <T>(
+  response: Response
+): Promise<ResponseWrapper<T>> => {
   try {
     return {
       data: await response.json(),
@@ -40,25 +49,47 @@ const parseJson = async (response: any): Promise<any> => {
       url: response.url,
     };
   } catch {
-    return response;
+    return {
+      data: undefined as unknown as T,
+      status: response.status,
+      url: response.url,
+    };
   }
 };
 
-const parseeText = async (response: any): Promise<any> => {
+const parseText = async <T>(
+  response: Response
+): Promise<ResponseWrapper<T>> => {
   try {
     return {
-      data: await response.text(),
+      data: (await response.text()) as unknown as T,
       status: response.status,
       url: response.url,
     };
   } catch {
-    return response;
+    return {
+      data: undefined as unknown as T,
+      status: response.status,
+      url: response.url,
+    };
   }
 };
 
-const parseBoolean = (result: any): any => {
-  const data = result.data?.toLowerCase();
-  if (data === "true") result.data = true;
-  if (data === "false") result.data = false;
-  return result;
+const parseBoolean = (
+  response: ResponseWrapper<string>
+): ResponseWrapper<string | boolean> => {
+  const lowerCaseData = response.data?.toLowerCase();
+  let booleanResult: boolean | undefined;
+
+  if (lowerCaseData === "true") {
+    booleanResult = true;
+  } else if (lowerCaseData === "false") {
+    booleanResult = false;
+  }
+
+  return {
+    data: booleanResult ?? response.data,
+    status: response.status,
+    url: response.url,
+  };
 };

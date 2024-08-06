@@ -231,12 +231,13 @@ apiInstance.addRequestInterceptor((config) => {
 You can transform responses before they are returned to your application.
 
 ```typescript
-import { apiInstance } from "castelapi";
+import { config } from "castelapi";
 
-apiInstance.addResponseInterceptor((response) => {
-  response.data = transformData(response.data);
-  return response;
-});
+
+config.responseInterceptor = function <T>(response: ResponseWrapper<T>): ResponseWrapper<T> {
+  response.data = transformData(response.data)
+  return response
+}
 
 function transformData(data) {
   // Custom transformation logic

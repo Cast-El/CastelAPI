@@ -39,9 +39,9 @@ class Api implements IApi {
     this.loading = true;
     const options: Options = this._updateOptions(method, paramsOptions);
     try {
-      const response = await fetch(url, options as RequestInit);
-      const result = parseResponse(response);
-      return this.useResponseInterceptor(result)  as Promise<ResponseWrapper<T>>;
+      const response: Response = await fetch(url, options as RequestInit);
+      const result = await parseResponse<T>(response);
+      return this.useResponseInterceptor<T>(result);
     } catch (error: any) {
       if (paramsOptions?.retry) {
         paramsOptions.retry--;
@@ -69,29 +69,22 @@ class Api implements IApi {
       method,
       headers,
     };
-    if (!paramsOptions && !this.config) {
-      return options;
-    }
-    let body;
     if (paramsOptions?.body) {
-      body = this._updateBody(paramsOptions.body);
-      if (body) {
-        options.body = body;
-      }
+      options.body = this._updateBody(paramsOptions.body);
     }
     return options;
   }
 
   private _updateHeaders(
-    paramsHeaders: Record<string, any> | undefined | null
-  ): Record<string, any> {
-    let headers: { [key: string]: any } = this.config?.headers || {};
+    paramsHeaders: Record<string, string> | undefined | null
+  ): Record<string, string> {
+    let headers: Record<string, string> = { ...this.config.headers };
     if (paramsHeaders) {
-      paramsHeaders.forEach((value: any, key: string) => {
-        headers[key] = value;
+      Object.keys(paramsHeaders).forEach((key) => {
+        headers[key] = paramsHeaders[key];
       });
     }
-    return headers || null;
+    return headers;
   }
 
   private _updateBody(body: Record<string, any>): any {
@@ -127,7 +120,7 @@ class Api implements IApi {
     url: Endpoint<string> | string,
     options?: PostOptions
   ): Promise<ResponseWrapper<T>> {
-    return this.#useApi(
+    return this.#useApi<T>(
       METHODS.post as Methods,
       this.createUrl(url, options?.parameters),
       options
@@ -138,7 +131,7 @@ class Api implements IApi {
     url: Endpoint<string> | string,
     options?: PostOptions
   ): Promise<ResponseWrapper<T>> {
-    return this.#useApi(
+    return this.#useApi<T>(
       METHODS.put as Methods,
       this.createUrl(url, options?.parameters),
       options
@@ -152,18 +145,18 @@ class Api implements IApi {
     if (isEndpoint(url)) {
       url = this.config.baseUrl + url;
     }
-    return this.#useApi(
+    return this.#useApi<T>(
       METHODS.delete as Methods,
       this.createUrl(url, options?.parameters),
       options
     );
   }
 
-  useResponseInterceptor<T>(data: T): Partial<T> {
+  useResponseInterceptor<T>(response: ResponseWrapper<T>): ResponseWrapper<T> {
     if (this.config?.responseInterceptor) {
-      return this.config.responseInterceptor(data);
+      return this.config.responseInterceptor(response);
     }
-    return data;
+    return response;
   }
 }
 
