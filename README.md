@@ -1,5 +1,7 @@
 # CastelAPI
 
+## **Warning** : CastelAPI is a Work in progess. Don't use it yet
+
 ## Introduction
 
 **CastelAPI** is a lightweight JavaScript library designed to simplify HTTP requests in web applications. It offers a clean and intuitive API for performing CRUD operations, handling loading states, caching responses, and managing retries. Whether you're building a small project or a large-scale application, CastelAPI helps streamline your API interactions.
