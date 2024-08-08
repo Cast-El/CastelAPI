@@ -18,7 +18,6 @@
   - [Loading Management](#loading-management)
   - [Cache Management](#cache-management)
   - [Retry Management](#retry-management)
-  - [Custom Request Interceptors](#custom-request-interceptors)
   - [Transforming Responses](#transforming-responses)
   - [Options Type](#options-type)
   - [Error Handling](#error-handling)
@@ -26,6 +25,7 @@
   - [How do I handle authentication?](#how-do-i-handle-authentication)
   - [Can I use CastelAPI with other libraries like Axios?](#can-i-use-castelapi-with-other-libraries-like-axios)
   - [How do I enable CORS?](#how-do-i-enable-cors)
+- [Features in progress](#features-in-progress)
 - [Contributing](#contributing)
 - [License](#license)
 
@@ -54,7 +54,6 @@ The `config` object allows you to set global parameters for CastelAPI. Below are
 
 - `baseUrl`: The base URL for all API requests.
 - `headers`: Default headers to include with every request.
-- `timeout`: Timeout for requests in milliseconds.
   Example:
 
 ```typescript
@@ -64,7 +63,6 @@ config.baseUrl = "https://api.example.com";
 config.headers = {
   "Content-Type": "application/json",
 };
-config.timeout = 5000; // 5 seconds
 ```
 
 ### GET Requests
@@ -213,19 +211,6 @@ const result = await get("/endpoint", {
 });
 ```
 
-### Custom Request Interceptors
-
-You can add custom request interceptors to modify requests before they are sent.
-
-```typescript
-import { apiInstance } from "castelapi";
-
-apiInstance.addRequestInterceptor((config) => {
-  config.headers["X-Custom-Header"] = "CustomValue";
-  return config;
-});
-```
-
 ### Transforming Responses
 
 You can transform responses before they are returned to your application.
@@ -313,6 +298,13 @@ yes, but CastelAPI is a standalone library for managing HTTP requests, and it do
 CORS must be enabled on the server-side. CastelAPI does not handle CORS directly.
 
 For any other questions, feel free to open an issue on GitHub.
+
+## Features in progress
+-Custom Request Interceptors
+-timeout config
+-disable parser with config
+-disable parser with option
+-expose parser
 
 ## Contributions
 
