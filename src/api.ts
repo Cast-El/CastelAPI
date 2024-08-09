@@ -1,25 +1,28 @@
-import Cache from "./cache";
-import { createUrlWithQuery, isEndpoint } from "./commons";
-import { parseResponse } from "./parser";
-import { IApi } from "./types/api";
-import { Config } from "./types/config";
-import { Endpoint } from "./types/endpoint";
-import { Options, PostOptions } from "./types/options";
-import { ResponseWrapper } from "./types/responseWrapper";
+import Cache from './cache';
+import { createUrlWithQuery, isEndpoint } from './commons';
+import { parseResponse } from './parser';
+import { IApi } from './types/api';
+import { Config } from './types/config';
+import { Endpoint } from './types/endpoint';
+import { Options, PostOptions } from './types/options';
+import { ResponseWrapper } from './types/responseWrapper';
 
 export const METHODS = {
-  post: "POST",
-  get: "GET",
-  put: "PUT",
-  delete: "DELETE",
+  post: 'POST',
+  get: 'GET',
+  put: 'PUT',
+  delete: 'DELETE',
 };
 
-type Methods = "POST" | "GET" | "PUT" | "DELETE";
+type Methods = 'POST' | 'GET' | 'PUT' | 'DELETE';
 
 class Api implements IApi {
+  CONTENT_TYPE = 'Content-Type';
+  APPLICATION_JSON = 'application/json';
+  doNotFormatPayload: boolean = false;
   public config: Config = {
-    baseUrl: "",
-    headers: {'Content-Type': 'application/json'},
+    baseUrl: '',
+    headers: {},
   };
   public cache: Cache;
   public loading: boolean = false;
@@ -29,11 +32,7 @@ class Api implements IApi {
     this.cache = new Cache();
   }
 
-  async #useApi<T>(
-    method: Methods,
-    url: string,
-    paramsOptions?: Options
-  ): Promise<ResponseWrapper<T>> {
+  async #useApi<T>(method: Methods, url: string, paramsOptions?: Options): Promise<ResponseWrapper<T>> {
     this.activeRequests++;
     this.loading = true;
     const options: Options = this._updateOptions(method, paramsOptions);
@@ -56,43 +55,36 @@ class Api implements IApi {
     }
   }
 
-  private _updateOptions(
-    method: Methods,
-    paramsOptions: PostOptions | undefined
-  ): PostOptions {
-    let headers;
-    if (paramsOptions?.headers || this.config?.headers) {
-      headers = this._updateHeaders(paramsOptions?.headers);
-    }
-    const options: PostOptions = {
-      method,
-      headers,
-    };
+  private _updateOptions(method: Methods, paramsOptions: PostOptions | undefined): PostOptions {
+    const hasHeaders = paramsOptions?.headers || this.config?.headers;
     if (paramsOptions?.body) {
-      options.body = this._updateBody(paramsOptions.body);
+      this.doNotFormatPayload = paramsOptions.body instanceof FormData || typeof paramsOptions.body === 'string';
     }
-    return options;
+    const body = paramsOptions?.body ? this._updateBody(paramsOptions.body) : undefined;
+    const headers = hasHeaders ? this._updateHeaders(paramsOptions?.headers) : undefined;
+    return { method, headers, body };
   }
 
-  private _updateHeaders(
-    paramsHeaders: Record<string, string> | undefined | null
-  ): Record<string, string> {
-    let headers: Record<string, string> = { ...this.config.headers };
+  private _updateHeaders(paramsHeaders: Record<string, string> | undefined | null): Record<string, string> {
+    const headers: Record<string, string> = { ...this.config.headers };
+    let hasContentType = false;
+    const lowerCaseContentType = this.CONTENT_TYPE.toLowerCase();
     if (paramsHeaders) {
-      Object.keys(paramsHeaders).forEach((key) => {
+      Object.keys(paramsHeaders).forEach((key: string) => {
+        if (key.toLowerCase() === lowerCaseContentType) {
+          hasContentType = true;
+        }
         headers[key] = paramsHeaders[key];
       });
+    }
+    if (!hasContentType && !this.doNotFormatPayload) {
+      headers[this.CONTENT_TYPE] = this.APPLICATION_JSON;
     }
     return headers;
   }
 
   private _updateBody(body: Record<string, any>): any {
-    if (!body) {
-      return;
-    }
-    const doNotFormatPayload =
-      body instanceof FormData || typeof body === "string";
-    if (doNotFormatPayload) {
+    if (this.doNotFormatPayload) {
       return body;
     }
     const formatPayload = Object.keys(body).length > 0;
@@ -108,47 +100,23 @@ class Api implements IApi {
     return path;
   }
 
-  get<T>(
-    url: Endpoint<string> | string,
-    options?: Options
-  ): Promise<ResponseWrapper<T>> {
+  get<T>(url: Endpoint<string> | string, options?: Options): Promise<ResponseWrapper<T>> {
     return this.#useApi<T>(METHODS.get as Methods, url, options);
   }
 
-  post<T>(
-    url: Endpoint<string> | string,
-    options?: PostOptions
-  ): Promise<ResponseWrapper<T>> {
-    return this.#useApi<T>(
-      METHODS.post as Methods,
-      this.createUrl(url, options?.parameters),
-      options
-    );
+  post<T>(url: Endpoint<string> | string, options?: PostOptions): Promise<ResponseWrapper<T>> {
+    return this.#useApi<T>(METHODS.post as Methods, this.createUrl(url, options?.parameters), options);
   }
 
-  put<T>(
-    url: Endpoint<string> | string,
-    options?: PostOptions
-  ): Promise<ResponseWrapper<T>> {
-    return this.#useApi<T>(
-      METHODS.put as Methods,
-      this.createUrl(url, options?.parameters),
-      options
-    );
+  put<T>(url: Endpoint<string> | string, options?: PostOptions): Promise<ResponseWrapper<T>> {
+    return this.#useApi<T>(METHODS.put as Methods, this.createUrl(url, options?.parameters), options);
   }
 
-  delete<T>(
-    url: Endpoint<string> | string,
-    options?: Options
-  ): Promise<ResponseWrapper<T>> {
+  delete<T>(url: Endpoint<string> | string, options?: Options): Promise<ResponseWrapper<T>> {
     if (isEndpoint(url)) {
       url = this.config.baseUrl + url;
     }
-    return this.#useApi<T>(
-      METHODS.delete as Methods,
-      this.createUrl(url, options?.parameters),
-      options
-    );
+    return this.#useApi<T>(METHODS.delete as Methods, this.createUrl(url, options?.parameters), options);
   }
 
   useResponseInterceptor<T>(response: ResponseWrapper<T>): ResponseWrapper<T> {
