@@ -19,8 +19,7 @@ type Methods = "POST" | "GET" | "PUT" | "DELETE";
 class Api implements IApi {
   public config: Config = {
     baseUrl: "",
-    headers: {},
-    timeout: NaN,
+    headers: {'Content-Type': 'application/json'},
   };
   public cache: Cache;
   public loading: boolean = false;
