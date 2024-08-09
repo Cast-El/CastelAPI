@@ -1,6 +1,6 @@
 {
   "name": "castelapi",
-  "version": "1.0.7",
+  "version": "1.1.0",
   "type": "module",
   "description": " a powerful and easy-to-use JavaScript library for managing HTTP requests in your web applications. Designed to simplify interactions with APIs, CastelAPI offers an intuitive interface and advanced features such as error handling, loading indicators, and response caching.",
   "main": "dist/castelApi.cjs.js",
@@ -40,6 +40,7 @@
     "@rollup/plugin-commonjs": "^26.0.1",
     "@rollup/plugin-node-resolve": "^15.2.3",
     "@types/node": "^22.1.0",
+    "prettier": "^3.3.3",
     "rollup": "^4.20.0",
     "rollup-plugin-typescript2": "^0.36.0",
     "tslib": "^2.6.3",
