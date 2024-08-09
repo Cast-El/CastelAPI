@@ -4,17 +4,14 @@
 
 <div style="display: flex; align-items: center;">
 <div style="margin:auto;display: flex; align-items: center;flex-direction:column">
-  <img src="https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white" alt="Git Hub" />
-  <span style="margin: 10px;"><a href="https://github.com/Cast-El/CastelAPI">https://github.com/Cast-El/CastelAPI</a></span>
-   <img src="https://img.shields.io/badge/npm-CB3837?style=for-the-badge&logo=npm&logoColor=white" alt="npm" />
-  <span style="margin: 10px;"><a href="https://www.npmjs.com/package/castelapi">https://www.npmjs.com/package/castelapi</a></span>
+  <span style="margin: 10px;"><a href="https://github.com/Cast-El/CastelAPI"><img src="https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white" alt="Git Hub" /></a></span>
+  <span style="margin: 10px;"><a href="https://www.npmjs.com/package/castelapi"><img src="https://img.shields.io/badge/npm-CB3837?style=for-the-badge&logo=npm&logoColor=white" alt="npm" /></a></span>
   </div>
 </div>
 
 ## Introduction
 
 **CastelAPI** is a lightweight JavaScript library designed to simplify HTTP requests in web applications. It offers a clean and intuitive API for performing CRUD operations, handling loading states, caching responses, and managing retries. Whether you're building a small project or a large-scale application, CastelAPI helps streamline your API interactions.
-
 
 ## Table of Contents
 
@@ -67,12 +64,12 @@ The `config` object allows you to set global parameters for CastelAPI. Below are
   Example:
 
 ```typescript
-import { apiInstance, config } from "castelapi";
+import { apiInstance, config } from 'castelapi'
 
-config.baseUrl = "https://api.example.com";
+config.baseUrl = 'https://api.example.com'
 config.headers = {
-  "Content-Type": "application/json",
-};
+  'Content-Type': 'application/json',
+}
 ```
 
 ### GET Requests
@@ -80,18 +77,18 @@ config.headers = {
 To make a GET request, use the get function:
 
 ```typescript
-import { get } from "castelapi";
+import { get } from 'castelapi'
 
 async function fetchData() {
   try {
-    const response = await get("https://api.example.com/endpoint");
-    console.log(response);
+    const response = await get('https://api.example.com/endpoint')
+    console.log(response)
   } catch (error) {
-    console.error("Error fetching data:", error);
+    console.error('Error fetching data:', error)
   }
 }
 
-fetchData();
+fetchData()
 ```
 
 Details:
@@ -99,14 +96,11 @@ Details:
 ```typescript
 //If url parameter start with "/" it would be an endpoint and baseUrl from config would be add to it.
 
-function get<T>(
-  url: Endpoint<string> | string,
-  options?: Options
-): Promise<ResponseWrapper<T>>;
+function get<T>(url: Endpoint<string> | string, options?: Options): Promise<ResponseWrapper<T>>
 
-const response = await get("https://api.example.com/endpoint"); //works
-const responseB = await get("/endpoint"); // works if config.baseUrl is set.
-const {data,status} = await get("/endpoint"); // Destructure response from ResponseWrapper type
+const response = await get('https://api.example.com/endpoint') //works
+const responseB = await get('/endpoint') // works if config.baseUrl is set.
+const { data, status } = await get('/endpoint') // Destructure response from ResponseWrapper type
 ```
 
 ### POST Requests
@@ -114,26 +108,23 @@ const {data,status} = await get("/endpoint"); // Destructure response from Respo
 To make a POST request, use the post function:
 
 ```typescript
-import { post } from "castelapi";
+import { post } from 'castelapi'
 
 async function createData() {
   try {
-    const data = { name: "John Doe", age: 30 };
-    const response = await post("https://api.example.com/users", {
+    const data = { name: 'John Doe', age: 30 }
+    const response = await post('https://api.example.com/users', {
       body: data,
-    });
-    console.log(response);
+    })
+    console.log(response)
   } catch (error) {
-    console.error("Error creating data:", error);
+    console.error('Error creating data:', error)
   }
 }
 
-createData();
+createData()
 
-function post<T>(
-  url: Endpoint<string> | string,
-  options?: PostOptions
-): Promise<ResponseWrapper<T>>;
+function post<T>(url: Endpoint<string> | string, options?: PostOptions): Promise<ResponseWrapper<T>>
 ```
 
 ### PUT Requests
@@ -143,17 +134,17 @@ To make a PUT request, use the put function:
 ```typescript
 async function updateData() {
   try {
-    const data = { name: "John Doe", age: 31 };
-    const response = await put("https://api.example.com/users/1", {
+    const data = { name: 'John Doe', age: 31 }
+    const response = await put('https://api.example.com/users/1', {
       body: data,
-    });
-    console.log(response);
+    })
+    console.log(response)
   } catch (error) {
-    console.error("Error updating data:", error);
+    console.error('Error updating data:', error)
   }
 }
 
-updateData();
+updateData()
 ```
 
 ### DELETE Requests
@@ -161,20 +152,20 @@ updateData();
 To make a DELETE request, use the remove function:
 
 ```typescript
-import { remove } from "castelapi";
+import { remove } from 'castelapi'
 
 async function deleteData(id: string) {
-  const parameters = new Map();
-  parameters.set("id", id);
+  const parameters = new Map()
+  parameters.set('id', id)
   try {
-    const response = await remove("/endpoint", parameters);
-    console.log(response);
+    const response = await remove('/endpoint', parameters)
+    console.log(response)
   } catch (error) {
-    console.error("Error deleting data:", error);
+    console.error('Error deleting data:', error)
   }
 }
-const id = "1Ldhio1561dsfdsNUIsd";
-deleteData(id);
+const id = '1Ldhio1561dsfdsNUIsd'
+deleteData(id)
 ```
 
 ### Loading Management
@@ -182,12 +173,12 @@ deleteData(id);
 To monitor the loading state of requests, use the loading function:
 
 ```typescript
-import { loading } from "castelapi";
+import { loading } from 'castelapi'
 
 if (loading()) {
-  console.log("Request is loading...");
+  console.log('Request is loading...')
 } else {
-  console.log("Request is not loading.");
+  console.log('Request is not loading.')
 }
 ```
 
@@ -196,16 +187,16 @@ if (loading()) {
 You can use cache to prevent outgoing requests.
 
 ```typescript
-import { get } from "castelapi";
+import { get } from 'castelapi'
 
-const result = await get("/endpoint", {
+const result = await get('/endpoint', {
   cache: { enabled: true, cacheTime: 3000 },
-});
-const cachedResult = await get("/endpoint");
+})
+const cachedResult = await get('/endpoint')
 setTimeout(async () => {
   // When cache value is expired, the request will be made again
-  const resultWithoutCache = await get("/endpoint");
-}, 4000);
+  const resultWithoutCache = await get('/endpoint')
+}, 4000)
 ```
 
 ### Retry Management
@@ -213,12 +204,12 @@ setTimeout(async () => {
 You can set an option to retry.
 
 ```typescript
-import { get } from "castelapi";
+import { get } from 'castelapi'
 
 // If the GET request to /endpoint fails, CastelAPI will retry 3 times.
-const result = await get("/endpoint", {
+const result = await get('/endpoint', {
   retry: 3,
-});
+})
 ```
 
 ### Transforming Responses
@@ -226,8 +217,7 @@ const result = await get("/endpoint", {
 You can transform responses before they are returned to your application.
 
 ```typescript
-import { config } from "castelapi";
-
+import { config } from 'castelapi'
 
 config.responseInterceptor = function <T>(response: ResponseWrapper<T>): ResponseWrapper<T> {
   response.data = transformData(response.data)
@@ -236,7 +226,7 @@ config.responseInterceptor = function <T>(response: ResponseWrapper<T>): Respons
 
 function transformData(data) {
   // Custom transformation logic
-  return data;
+  return data
 }
 ```
 
@@ -246,16 +236,16 @@ Here the type option you can pass on:
 
 ```typescript
 type Options = {
-  retry?: number;
-  headers?: Partial<Headers> | Record<string, string> | null | undefined;
-  method?: string;
-  parameters?: Map<string, any>;
-  cache?: { enabled: boolean; cacheTime: number };
-};
+  retry?: number
+  headers?: Partial<Headers> | Record<string, string> | null | undefined
+  method?: string
+  parameters?: Map<string, any>
+  cache?: { enabled: boolean; cacheTime: number }
+}
 
 type PostOptions = Options & {
-  body?: Record<string, any>;
-};
+  body?: Record<string, any>
+}
 ```
 
 ## Error Handling
@@ -265,24 +255,24 @@ CastelAPI throws errors for network issues, server errors, and other request fai
 Example:
 
 ```typescript
-import { get } from "castelapi";
+import { get } from 'castelapi'
 
 async function fetchData() {
   try {
-    const response = await get("https://api.example.com/endpoint");
-    console.log(response);
+    const response = await get('https://api.example.com/endpoint')
+    console.log(response)
   } catch (error) {
     if (error instanceof NetworkError) {
-      console.error("Network error:", error.message);
+      console.error('Network error:', error.message)
     } else if (error instanceof ServerError) {
-      console.error("Server error:", error.message);
+      console.error('Server error:', error.message)
     } else {
-      console.error("Unexpected error:", error);
+      console.error('Unexpected error:', error)
     }
   }
 }
 
-fetchData();
+fetchData()
 ```
 
 ## FAQ
@@ -292,11 +282,11 @@ fetchData();
 You can set authentication headers in the global configuration.
 
 ```typescript
-import { config } from "castelapi";
+import { config } from 'castelapi'
 
 config.headers = {
-  Authorization: "Bearer YOUR_API_KEY",
-};
+  Authorization: 'Bearer YOUR_API_KEY',
+}
 ```
 
 ### Can I use CastelAPI with other libraries like Axios?
@@ -310,6 +300,7 @@ CORS must be enabled on the server-side. CastelAPI does not handle CORS directly
 For any other questions, feel free to open an issue on GitHub.
 
 ## Features in progress
+
 -Custom Request Interceptors
 -timeout config
 -disable parser with config
