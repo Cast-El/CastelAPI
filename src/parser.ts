@@ -8,7 +8,7 @@ export const parseResponse = async <T>(response: Response): Promise<ResponseWrap
   return await parse<T>(response)
 }
 
-export const parse = async <T>(response: Response, responseType?: ResponseType): Promise<ResponseWrapper<T>> => {
+const parse = async <T>(response: Response, responseType?: ResponseType): Promise<ResponseWrapper<T>> => {
   const isBlob = response.headers?.get('Content-Type') === 'application/pdf' || responseType === 'blob'
   const isError = response instanceof TypeError || !response
   const hasNoCloneFunction = !response || typeof response.clone !== 'function'
