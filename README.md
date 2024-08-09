@@ -4,8 +4,8 @@
 
 <div style="display: flex; align-items: center;">
 <div style="margin:auto;display: flex; align-items: center;flex-direction:column">
-  <span style="margin: 10px;"><a href="https://github.com/Cast-El/CastelAPI"><img src="https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white" alt="Git Hub" /></a></span>
-  <span style="margin: 10px;"><a href="https://www.npmjs.com/package/castelapi"><img src="https://img.shields.io/badge/npm-CB3837?style=for-the-badge&logo=npm&logoColor=white" alt="npm" /></a></span>
+  <span style="margin: 10px;"><a href="https://github.com/Cast-El/CastelAPI"><img src="https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white" alt="Git Hub" style="margin: 10px;"/></a></span>
+  <span style="margin: 10px;"><a href="https://www.npmjs.com/package/castelapi"><img src="https://img.shields.io/badge/npm-CB3837?style=for-the-badge&logo=npm&logoColor=white" alt="npm" style="margin: 10px;"/></a></span>
   </div>
 </div>
 
