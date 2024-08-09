@@ -3,11 +3,11 @@
 </div>
 
 <div style="display: flex; align-items: center;">
-<div style="margin:auto;display: flex; align-items: center;">
+<div style="margin:auto;display: flex; align-items: center;flex-direction:column">
   <img src="https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white" alt="Git Hub" />
-  <span style="margin-left: 10px;margin-right:10px">: <a href="https://github.com/Cast-El/CastelAPI">https://github.com/Cast-El/CastelAPI</a></span>
+  <span style="margin: 10px;"><a href="https://github.com/Cast-El/CastelAPI">https://github.com/Cast-El/CastelAPI</a></span>
    <img src="https://img.shields.io/badge/npm-CB3837?style=for-the-badge&logo=npm&logoColor=white" alt="npm" />
-  <span style="margin: 10px;margin-right:10px">: <a href="https://www.npmjs.com/package/castelapi">https://www.npmjs.com/package/castelapi</a></span>
+  <span style="margin: 10px;"><a href="https://www.npmjs.com/package/castelapi">https://www.npmjs.com/package/castelapi</a></span>
   </div>
 </div>
 
