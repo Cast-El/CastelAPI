@@ -4,13 +4,19 @@
 
 ## Introduction
 
-**CastelAPI** is a lightweight JavaScript library designed to simplify HTTP requests in web applications. It offers a clean and intuitive API for performing CRUD operations, handling loading states, caching responses, and managing retries. Whether you're building a small project or a large-scale application, CastelAPI helps streamline your API interactions.
+**CastelAPI** is a lightweight JavaScript library designed to simplify HTTP requests in web applications. It offers a clean and intuitive API for performing CRUD operations, handling loading states, caching responses, and managing retries. Whether you're building a small project or a large-scale application, CastelAPI helps streamline your API interactions. This library is framework-agnostic, so it can be used for both front-end and back-end projects. For front-end applications, it's SSR-friendly and can be used with Nuxt, Next, Nest, etc.
+
+## New Features
+
+- [Cache Management]: This version adds two new strategies. You can now change the cache management strategy and use localStorage or sessionStorage for a front-end application. These features include a parser to make life easier for you, and it's still SSR-friendly. If `window` is not available, this feature won't be enabled. The cache management section has been updated.
+- [TypeScript]: Better type tracking with TypeScript than in the previous version. Some changes in the build. You can now use the power of generic functions :smile: !
 
 ## Table of Contents
 
 - [Installation](#installation)
 - [Usage](#usage)
   - [Configuration](#configuration)
+  - [Use TypeScript to Keep Track of Types](#use-typescript-to-keep-track-of-types)
   - [GET Requests](#get-requests)
   - [POST Requests](#post-requests)
   - [PUT Requests](#put-requests)
@@ -65,6 +71,26 @@ config.headers = {
 }
 ```
 
+### Use TypeScript to Keep Track of Types
+
+The following example demonstrates how to use TypeScript with generic functions:
+
+```typescript
+// You can pass a type to the generic function
+type User = { id: number; name: string }
+const responseC: User = await get<User>('/endpoint')
+```
+Here how your IDE will describe this function :
+```typescript
+(alias) get<User>(url: Endpoint<string> | string, options?: Options): Promise<ResponseWrapper<User>>
+import get
+// Fetches data from the specified URL.
+// @param url — The endpoint or URL to fetch data from.
+// @param options — The request options.
+// @returns — - A promise that resolves with the fetched data.
+// @throws — {Error} - Throws an error if the request fails.
+```
+
 ### GET Requests
 
 To make a GET request, use the get function:
@@ -87,12 +113,12 @@ fetchData()
 Details:
 
 ```typescript
-//If url parameter start with "/" it would be an endpoint and baseUrl from config would be add to it.
+// If the URL parameter starts with "/", it will be treated as an endpoint, and the baseUrl from the config will be added to it.
 
 function get<T>(url: Endpoint<string> | string, options?: Options): Promise<ResponseWrapper<T>>
 
-const response = await get('https://api.example.com/endpoint') //works
-const responseB = await get('/endpoint') // works if config.baseUrl is set.
+const response = await get('https://api.example.com/endpoint') // Works
+const responseB = await get('/endpoint') // Works if config.baseUrl is set
 const { data, status } = await get('/endpoint') // Destructure response from ResponseWrapper type
 ```
 
@@ -187,9 +213,58 @@ const result = await get('/endpoint', {
 })
 const cachedResult = await get('/endpoint')
 setTimeout(async () => {
-  // When cache value is expired, the request will be made again
+  // if cache value is expired, the request is made again
   const resultWithoutCache = await get('/endpoint')
 }, 4000)
+```
+
+New features: cache strategy management. You can now choose what type of cache to use.
+
+instanceCache (Default): It should be used for SPA and back-end apps.
+localStorageCache: It should be used for front-end applications without SSR like Vue, React. If you want to keep your cache across multiple windows, see: <https://developer.mozilla.org/fr/docs/Web/API/Window/localStorage>
+sessionStorageCache: It should be used for front-end applications without SSR like Vue, React. See: <https://developer.mozilla.org/en-US/docs/Web/API/Window/sessionStorage>
+
+```typescript
+setCacheStrategy(cacheStrategy: InstanceCache | LocalStorageCache | SessionStorageCache): void
+```
+
+```typescript
+import { get, setCacheStrategy, localStorageCache } from 'castelapi'
+
+setCacheStrategy(localStorageCache)
+// Now cache used is localStorage with parser
+const result = await get('/endpoint', {
+  cache: { enabled: true, cacheTime: 3000 },
+})
+const cachedResult = await get('/endpoint')
+setTimeout(async () => {
+  // if cache value is expired, the request is made again
+  const resultWithoutCache = await get('/endpoint')
+}, 4000)
+```
+
+You can even use one of the three instances if you wish; they implement the cache interface with a parser included. This could be useful if you use `localStorage` or `sessionStorage` in your app:
+
+```typescript
+type CachedValue<T> = {
+  data: T
+  timeStamp: number
+}
+
+interface Cache {
+  get<T>(key: string): CachedValue<T> | null
+  set<T>(key: string, value: T, cacheTime: number): void
+  isExpired(cachedResponse: CachedValue): boolean
+  clear(): void
+  delete(key: string): void
+}
+```
+
+```typescript
+import { sessionStorageCache } from 'castelapi'
+
+sessionStorageCache.set('id', { myId: 123 }, 1000)
+const cachedValue = sessionStorageCache.get('id')
 ```
 
 ### Retry Management
