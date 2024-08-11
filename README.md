@@ -1,5 +1,6 @@
 <div align="center">
   <h1>CastelAPI</h1>
+  [![Socket Badge](https://socket.dev/api/badge/npm/package/castelapi/undefined)](https://socket.dev/npm/package/castelapi/overview/1.2.1
 </div>
 
 ## Introduction
