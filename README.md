@@ -220,9 +220,9 @@ setTimeout(async () => {
 
 New features: cache strategy management. You can now choose what type of cache to use.
 
-instanceCache (Default): It should be used for SPA and back-end apps.
-localStorageCache: It should be used for front-end applications without SSR like Vue, React. If you want to keep your cache across multiple windows, see: <https://developer.mozilla.org/fr/docs/Web/API/Window/localStorage>
-sessionStorageCache: It should be used for front-end applications without SSR like Vue, React. See: <https://developer.mozilla.org/en-US/docs/Web/API/Window/sessionStorage>
+- instanceCache (Default): It should be used for SPA and back-end apps.
+- localStorageCache: It should be used for front-end applications without SSR like Vue, React. If you want to keep your cache across multiple windows, see: [localStorage documentation](https://developer.mozilla.org/fr/docs/Web/API/Window/localStorage)
+- sessionStorageCache: It should be used for front-end applications without SSR like Vue, React. See: [sessionStorage documentation](https://developer.mozilla.org/en-US/docs/Web/API/Window/sessionStorage)
 
 ```typescript
 setCacheStrategy(cacheStrategy: InstanceCache | LocalStorageCache | SessionStorageCache): void
