@@ -1,7 +1,6 @@
-import Cache from './cache';
 import { createUrlWithQuery, isEndpoint } from './commons';
 import { parseResponse } from './parser';
-import { IApi } from './types/api';
+import { Api } from './types/api';
 import { Config } from './types/config';
 import { Endpoint } from './types/endpoint';
 import { Options, PostOptions } from './types/options';
@@ -16,7 +15,7 @@ export const METHODS = {
 
 type Methods = 'POST' | 'GET' | 'PUT' | 'DELETE';
 
-class Api implements IApi {
+export default class CrudApi implements Api {
   CONTENT_TYPE = 'Content-Type';
   APPLICATION_JSON = 'application/json';
   doNotFormatPayload: boolean = false;
@@ -24,13 +23,8 @@ class Api implements IApi {
     baseUrl: '',
     headers: {},
   };
-  public cache: Cache;
   public loading: boolean = false;
   public activeRequests: number = 0;
-
-  constructor() {
-    this.cache = new Cache();
-  }
 
   async #useApi<T>(method: Methods, url: string, paramsOptions?: Options): Promise<ResponseWrapper<T>> {
     this.activeRequests++;
@@ -126,5 +120,3 @@ class Api implements IApi {
     return response;
   }
 }
-
-export default Api;

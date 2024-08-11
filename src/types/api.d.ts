@@ -1,15 +1,10 @@
-import Cache from '../cache'
-import { createUrlWithQuery, isEndpoint } from './commons'
-import { parseResponse } from './parser'
-import { IApi } from './types/api'
 import { Config } from './types/config'
 import { Endpoint } from './types/endpoint'
 import { Options, PostOptions } from './types/options'
 import { ResponseWrapper } from './types/responseWrapper'
 
-export interface IApi {
+export interface Api {
   config: Config
-  cache: Cache
   loading: boolean
   activeRequests: number
 
