@@ -246,8 +246,12 @@ setTimeout(async () => {
 You can even use one of the three instances if you wish; they implement the cache interface with a parser included. This could be useful if you use `localStorage` or `sessionStorage` in your app:
 
 ```typescript
-type CachedValue<T> = {
+type ResponseWrapper<T> = {
   data: T
+  status: number
+  url: string
+}
+type CachedValue<T> = ResponseWrapper<T> && {
   timeStamp: number
 }
 

@@ -10,18 +10,18 @@ export default class InstanceCache implements Cache {
   }
 
   get<T>(key: string): CachedValue<T> | null {
-    const data = this.#store.get(key)
+    const data: CachedValue<T> = this.#store.get(key)
     const isExpired =this.isExpired(data)
     if(isExpired){
       this.delete(key)
       return null
     }
-    return data as CachedValue<T>
+    return data
   }
 
-  set<T>(key: string, value: T, cacheTime: number) {
+  set<T>(key: string, data: T, cacheTime: number) {
     this.#store.set(key, {
-      value: value as T,
+      data,
       timeStamp: Date.now() + cacheTime,
     })
   }

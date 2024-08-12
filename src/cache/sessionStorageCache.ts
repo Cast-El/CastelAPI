@@ -26,11 +26,11 @@ export default class SessionStorageCache implements Cache {
     return jsonData as CachedValue<T>
   }
 
-  set<T>(key: string, value: T, cacheTime: number) {
+  set<T>(key: string, data: T, cacheTime: number) {
     window.sessionStorage.setItem(
       key,
       JSON.stringify({
-        data: value as T,
+        ...data,
         timeStamp: Date.now() + cacheTime,
       }),
     )
