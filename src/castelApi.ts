@@ -6,7 +6,6 @@ import CrudApi from './crudApi'
 import InstanceCache from './cache/instanceCache'
 import LocalStorageCache from './cache/localStorageCache'
 import SessionStorageCache from './cache/sessionStorageCache'
-import { Cache } from './types/cache'
 import CacheManager from './cache/cacheManager'
 
 export const apiInstance = new CrudApi()
