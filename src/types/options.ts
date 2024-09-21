@@ -4,6 +4,7 @@ export type Options = {
   method?: string
   parameters?: Map<string, any>
   cache?: { enabled: boolean; cacheTime: number }
+  timeout?: number
 }
 
 export type PostOptions = Options & {

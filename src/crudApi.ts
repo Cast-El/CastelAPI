@@ -119,4 +119,10 @@ export default class CrudApi implements Api {
     }
     return response
   }
+
+  timeOut(options: Options): number | null {
+    return this.config?.timeout ||  options?.timeout || null
+  }
+
+  
 }
