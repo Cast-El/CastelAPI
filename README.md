@@ -6,6 +6,10 @@
 
 **CastelAPI** is a lightweight JavaScript library designed to simplify HTTP requests in web applications. It offers a clean and intuitive API for performing CRUD operations, handling loading states, caching responses, and managing retries. Whether you're building a small project or a large-scale application, CastelAPI helps streamline your API interactions. This library is framework-agnostic, so it can be used for both front-end and back-end projects. For front-end applications, it's SSR-friendly and can be used with Nuxt, Next, Nest, etc.
 
+## Bug fixed in 1.3.0
+
+fix parameters option for get request.
+
 ## New Features
 
 - [Cache Management]: This version adds two new strategies. You can now change the cache management strategy and use localStorage or sessionStorage for a front-end application. These features include a parser to make life easier for you, and it's still SSR-friendly. If `window` is not available, this feature won't be enabled. The cache management section has been updated.
