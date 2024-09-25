@@ -1,5 +1,3 @@
-import { isEndpoint } from './commons'
-import { Endpoint } from './types/endpoint'
 import { Options, PostOptions } from './types/options'
 import { ResponseWrapper } from './types/responseWrapper'
 import CrudApi from './crudApi'
@@ -34,13 +32,13 @@ export const setCacheStrategy = (cacheStrategy: InstanceCache | LocalStorageCach
 
 /**
  * Fetches data from the specified URL.
- * @param {Endpoint<string> | string} url - The endpoint or URL to fetch data from.
+ * @param {string} url - The endpoint or URL to fetch data from.
  * @param {Options} [options] - The request options.
  * @returns {Promise<ResponseWrapper<T>>} - A promise that resolves with the fetched data.
  * @throws {Error} - Throws an error if the request fails.
  */
-export async function get<T>(url: Endpoint<string> | string, options?: Options): Promise<ResponseWrapper<T>> {
-  if (isEndpoint(url)) {
+export async function get<T>(url: string | string, options?: Options): Promise<ResponseWrapper<T>> {
+  if (apiInstance.config.baseUrl) {
     url = apiInstance.config.baseUrl + url
   }
   const cachedResponse = cache.get<ResponseWrapper<T>>(url) as ResponseWrapper<T> | null
@@ -54,12 +52,12 @@ export async function get<T>(url: Endpoint<string> | string, options?: Options):
 
 /**
  * Sends data to the specified URL using the POST method.
- * @param {Endpoint<string> | string} url - The endpoint or URL to send data to.
+ * @param {string} url - The endpoint or URL to send data to.
  * @param {PostOptions} [options] - The request options.
  * @returns {Promise<ResponseWrapper<T>>} - A promise that resolves with the server response.
  */
-export function post<T>(url: Endpoint<string> | string, options?: PostOptions): Promise<ResponseWrapper<T>> {
-  if (isEndpoint(url)) {
+export function post<T>(url: string, options?: PostOptions): Promise<ResponseWrapper<T>> {
+  if (apiInstance.config.baseUrl) {
     url = apiInstance.config.baseUrl + url
   }
   return apiInstance.post<T>(url, options)
@@ -67,12 +65,12 @@ export function post<T>(url: Endpoint<string> | string, options?: PostOptions): 
 
 /**
  * Updates data at the specified URL using the PUT method.
- * @param {Endpoint<string> | string} url - The endpoint or URL to send data to.
+ * @param {string} url - The endpoint or URL to send data to.
  * @param {PostOptions} [options] - The request options.
  * @returns {Promise<ResponseWrapper<T>>} - A promise that resolves with the server response.
  */
-export function put<T>(url: Endpoint<string> | string, options?: PostOptions): Promise<ResponseWrapper<T>> {
-  if (isEndpoint(url)) {
+export function put<T>(url: string, options?: PostOptions): Promise<ResponseWrapper<T>> {
+  if (apiInstance.config.baseUrl) {
     url = apiInstance.config.baseUrl + url
   }
   return apiInstance.put<T>(url, options)
@@ -80,12 +78,12 @@ export function put<T>(url: Endpoint<string> | string, options?: PostOptions): P
 
 /**
  * Deletes data at the specified URL using the DELETE method.
- * @param {Endpoint<string> | string} url - The endpoint or URL to send data to.
+ * @param {string} url - The endpoint or URL to send data to.
  * @param {Options} [options] - The request options.
  * @returns {Promise<ResponseWrapper<T>>} - A promise that resolves with the server response.
  */
-export function remove<T>(url: Endpoint<string> | string, options?: Options): Promise<ResponseWrapper<T>> {
-  if (isEndpoint(url)) {
+export function remove<T>(url: string, options?: Options): Promise<ResponseWrapper<T>> {
+  if (apiInstance.config.baseUrl) {
     url = apiInstance.config.baseUrl + url
   }
   return apiInstance.delete<T>(url, options)
