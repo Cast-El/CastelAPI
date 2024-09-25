@@ -1,5 +1,3 @@
-import { Endpoint } from './types/endpoint'
-
 export const createUrlWithQuery = (url: string, mapQuery: Map<string, any>): string => {
   const params = new URLSearchParams()
   for (const [key, value] of mapQuery) {
@@ -8,8 +6,4 @@ export const createUrlWithQuery = (url: string, mapQuery: Map<string, any>): str
     }
   }
   return `${url}?${params.toString()}`
-}
-
-export const isEndpoint = (url: string): url is Endpoint<string> => {
-  return url.startsWith('/')
 }

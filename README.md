@@ -6,9 +6,19 @@
 
 **CastelAPI** is a lightweight JavaScript library designed to simplify HTTP requests in web applications. It offers a clean and intuitive API for performing CRUD operations, handling loading states, caching responses, and managing retries. Whether you're building a small project or a large-scale application, CastelAPI helps streamline your API interactions. This library is framework-agnostic, so it can be used for both front-end and back-end projects. For front-end applications, it's SSR-friendly and can be used with Nuxt, Next, Nest, etc.
 
-## Bug fixed in 1.3.0
+## Breaking change in 1.4.0
 
-fix parameters option for get request.
+If you configure your baseUrl, it would alway be apply to your endpoint:
+```typescript
+//by default config.baseUrl = ''
+const response = await get('https://api.example.com/endpoint') // Works because config.baseUrl is NOT set
+
+//now we configure baseUrl
+config.baseUrl = 'https://api.example.com'
+const response = await get('https://api.example.com/endpoint')//Doesn't work anymore
+const response = await get('/endpoint')//works. Use this instead
+
+```
 
 ## New Features
 
@@ -86,7 +96,7 @@ const responseC: User = await get<User>('/endpoint')
 ```
 Here how your IDE will describe this function :
 ```typescript
-(alias) get<User>(url: Endpoint<string> | string, options?: Options): Promise<ResponseWrapper<User>>
+(alias) get<User>(url: string, options?: Options): Promise<ResponseWrapper<User>>
 import get
 // Fetches data from the specified URL.
 // @param url — The endpoint or URL to fetch data from.
@@ -117,9 +127,8 @@ fetchData()
 Details:
 
 ```typescript
-// If the URL parameter starts with "/", it will be treated as an endpoint, and the baseUrl from the config will be added to it.
 
-function get<T>(url: Endpoint<string> | string, options?: Options): Promise<ResponseWrapper<T>>
+function get<T>(url: string, options?: Options): Promise<ResponseWrapper<T>>
 
 const response = await get('https://api.example.com/endpoint') // Works
 const responseB = await get('/endpoint') // Works if config.baseUrl is set
@@ -147,7 +156,7 @@ async function createData() {
 
 createData()
 
-function post<T>(url: Endpoint<string> | string, options?: PostOptions): Promise<ResponseWrapper<T>>
+function post<T>(url: string, options?: PostOptions): Promise<ResponseWrapper<T>>
 ```
 
 ### PUT Requests

@@ -1,8 +1,7 @@
-import { createUrlWithQuery, isEndpoint } from './commons'
+import { createUrlWithQuery } from './commons'
 import { parseResponse } from './parser'
 import { Api } from './types/api'
 import { Config } from './types/config'
-import { Endpoint } from './types/endpoint'
 import { Options, PostOptions } from './types/options'
 import { ResponseWrapper } from './types/responseWrapper'
 
@@ -94,22 +93,19 @@ export default class CrudApi implements Api {
     return path
   }
 
-  get<T>(url: Endpoint<string> | string, options?: Options): Promise<ResponseWrapper<T>> {
+  get<T>(url: string, options?: Options): Promise<ResponseWrapper<T>> {
     return this.#useApi<T>(METHODS.get as Methods, this.createUrl(url, options?.parameters), options)
   }
 
-  post<T>(url: Endpoint<string> | string, options?: PostOptions): Promise<ResponseWrapper<T>> {
+  post<T>(url: string, options?: PostOptions): Promise<ResponseWrapper<T>> {
     return this.#useApi<T>(METHODS.post as Methods, this.createUrl(url, options?.parameters), options)
   }
 
-  put<T>(url: Endpoint<string> | string, options?: PostOptions): Promise<ResponseWrapper<T>> {
+  put<T>(url: string, options?: PostOptions): Promise<ResponseWrapper<T>> {
     return this.#useApi<T>(METHODS.put as Methods, this.createUrl(url, options?.parameters), options)
   }
 
-  delete<T>(url: Endpoint<string> | string, options?: Options): Promise<ResponseWrapper<T>> {
-    if (isEndpoint(url)) {
-      url = this.config.baseUrl + url
-    }
+  delete<T>(url: string, options?: Options): Promise<ResponseWrapper<T>> {
     return this.#useApi<T>(METHODS.delete as Methods, this.createUrl(url, options?.parameters), options)
   }
 
